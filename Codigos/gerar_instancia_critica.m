@@ -4,15 +4,15 @@
 clc; clear;
 
 % Problema com restrição redundante para forçar x_artifical = 0 na base final da Fase 1
-A = [ 1,  2,  0;
-      2,  4,  0;
-      1,  1,  1 ];
+A = [ 1, 3, 0, 4, 5, 1,  0;
+      2,  4,  0, 1, -6, -1, -4;
+      1,  1,  1, 2, 3, 5, 4 ];
 
 b = [ 4;
       8;
-      3 ];
+      5 ];
 
-c = [-1; -2; 0];
+c = [-1; -2; 0; 0;0;0;0;0;0;0;0;0;0];
 
 [m, n] = size(A);
 

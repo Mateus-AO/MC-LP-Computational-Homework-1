@@ -1,4 +1,5 @@
 function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
+    eps = 1e-9;
 
     for i = 1:m
         if b(i) < 0
@@ -21,8 +22,13 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
     [ind_fase1, x_aux, ind_B, ind_N] = ...
         executa_simplex(A_aux, b, c_aux, ...
                         ind_B, ind_N, m, n + m);
+    
+    % idx_fase1 = 0 // 
+    % x_aux = solução otima
 
-    val_fase1 = c_aux' * x_aux;
+
+    val_fase1 = c_aux' * x_aux; % resposta otimal tem que ser 0
+    % val_fase1 = 0 => x_aux_{idx_B} = 0
 
     if val_fase1 > 0
         disp('Resultado Fase 1: Problema inviavel.');
@@ -41,7 +47,11 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
     % ================================================================
     disp('=== Iniciando Fase 2 ===');
 
-    ind_B_fase2 = ind_B(ind_B <= n);
+    if size(ind_B, 1) ~= m
+        [A, ind_B, b, m] = pivotamento_neutro(A_aux, b, ind_B, m, n);
+    end
+
+    ind_B_fase2 = ind_B(ind_B <= n); % return only the elements <= n
     ind_N_fase2 = ind_N(ind_N <= n);
 
     B = A(:, ind_B_fase2);
@@ -66,6 +76,10 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
                         ind_B_fase2, ind_N_fase2, ...
                         m, n);
 
+    if ind == -1
+        disp('Resultado Fase 2: Problema ilimitado.');
+    endif
+
     x = x_full;
 
 end
@@ -78,6 +92,7 @@ end
 function [ind, x_sol, ind_B, ind_N, d] = ...
     executa_simplex(A, b, c, ind_B, ind_N, m, n)
 
+    eps = 1e-9;
     d = zeros(n, 1);
 
     max_iter = 100;
@@ -91,6 +106,7 @@ function [ind, x_sol, ind_B, ind_N, d] = ...
         N = A(:, ind_N);
 
         x_B = B \ b;
+        % '\' operator means solving the Linear System Bx = b
 
         x_sol = zeros(n, 1);
         x_sol(ind_B) = x_B;

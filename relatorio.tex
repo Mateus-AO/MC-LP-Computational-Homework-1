@@ -25,6 +25,8 @@ MC22 - Otimização Linear (2026.2)}
 \section*{Parte 1: Auditoria e Depuração de Código}
 
 \section*{Parte 2: Instância Parametrizada por Matrícula}
+Matrícula: 3350
+
 $$
 \min_{x\geq0}-(d_1+1)x_1-(d_2+2)x_2-(d_3+1)x_3
 $$
@@ -39,9 +41,10 @@ x_1\\x_2\\x_3
 \end{pmatrix}
 \leq
 \begin{pmatrix}
-d_1\\d_2\\d_3
+10+d_1\\12+d_2\\8+d_3
 \end{pmatrix}
 $$
+
 Substituindo os valores
 $
 d_1=3,\,
@@ -64,8 +67,34 @@ x_1\\x_2\\x_3
 \end{pmatrix}
 \leq
 \begin{pmatrix}
-3\\3\\5
+13\\15\\13
 \end{pmatrix}
 $$
+
+Vetor de custos reduzidos final:
+$$\overline{c}=
+\begin{pmatrix}
+. & . & .
+\end{pmatrix}^T
+$$
+
+Inversa da base ótima:
+$$B^{-1}=
+\begin{pmatrix}
+. & . & .\\
+. & . & .\\
+. & . & .
+\end{pmatrix}
+$$
+
+Vetor dual:
+$$y^*=
+\begin{pmatrix}
+. & . & . & . & . & .
+\end{pmatrix}^T
+$$
+
+Intervalo de variação do coeficiente $c_1$:
+$$.\leq c_1 \leq .$$
 
 \end{document}

@@ -1,0 +1,156 @@
+function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
+
+    for i = 1:m
+        if b(i) < 0
+            A(i, :) = -A(i, :);
+            b(i) = -b(i);
+        end
+    end
+
+    % ================================================================
+    % FASE 1
+    % ================================================================
+    disp('=== Iniciando Fase 1 ===');
+
+    A_aux = [A, eye(m)];
+    c_aux = [zeros(n, 1); ones(m, 1)];
+
+    ind_B = (n + 1):(n + m);
+    ind_N = 1:n;
+
+    [ind_fase1, x_aux, ind_B, ind_N] = ...
+        executa_simplex(A_aux, b, c_aux, ...
+                        ind_B, ind_N, m, n + m);
+
+    val_fase1 = c_aux' * x_aux;
+
+    if val_fase1 > 0
+        disp('Resultado Fase 1: Problema inviavel.');
+
+        ind = 1;
+        x = [];
+        d = [];
+        return;
+    end
+
+    disp('Resultado Fase 1: Solucao viavel encontrada.');
+
+
+    % ================================================================
+    % TRANSICAO PARA A FASE 2
+    % ================================================================
+    disp('=== Iniciando Fase 2 ===');
+
+    ind_B_fase2 = ind_B(ind_B <= n);
+    ind_N_fase2 = ind_N(ind_N <= n);
+
+    B = A(:, ind_B_fase2);
+
+    if size(B, 1) ~= m || size(B, 2) ~= m
+        error(['ERRO CRITICO NA TRANSICAO PARA A FASE 2: ' ...
+               'a matriz selecionada como base nao possui ' ...
+               'dimensao m x m.']);
+    end
+
+    if rank(B) < m
+        error(['ERRO CRITICO NA TRANSICAO PARA A FASE 2: ' ...
+               'a matriz selecionada como base e singular.']);
+    end
+
+
+    % ================================================================
+    % FASE 2
+    % ================================================================
+    [ind, x_full, ind_B_fase2, ind_N_fase2, d] = ...
+        executa_simplex(A, b, c, ...
+                        ind_B_fase2, ind_N_fase2, ...
+                        m, n);
+
+    x = x_full;
+
+end
+
+
+% ===================================================================
+% SIMPLEX
+% ===================================================================
+
+function [ind, x_sol, ind_B, ind_N, d] = ...
+    executa_simplex(A, b, c, ind_B, ind_N, m, n)
+
+    d = zeros(n, 1);
+
+    max_iter = 100;
+    iter = 0;
+
+    while iter < max_iter
+
+        iter = iter + 1;
+
+        B = A(:, ind_B);
+        N = A(:, ind_N);
+
+        x_B = B \ b;
+
+        x_sol = zeros(n, 1);
+        x_sol(ind_B) = x_B;
+
+        y = (B') \ c(ind_B);
+
+        c_N_bar = c(ind_N) - N' * y;
+
+        % Teste de otimalidade
+        if all(c_N_bar >= 0)
+            ind = 0;
+            return;
+        end
+
+        % Variavel entrante
+        cand_entra = find(c_N_bar < 0);
+
+        idx_q = cand_entra(1);
+        q = ind_N(idx_q);
+
+        % Direcao simplex
+        u = B \ A(:, q);
+
+        % Teste de ilimitacao
+        if all(u <= 0)
+            ind = -1;
+
+            d(q) = 1;
+            d(ind_B) = -u;
+
+            return;
+        end
+
+        % Teste da razao
+        razoes = Inf(m, 1);
+
+        for i = 1:m
+            if u(i) > 0
+                razoes(i) = x_B(i) / u(i);
+            end
+        end
+
+        min_raz = min(razoes);
+
+        cand_sai = find(razoes == min_raz);
+
+        var_saindo = ind_B(cand_sai);
+
+        [~, idx_s_local] = min(var_saindo);
+
+        p_idx = cand_sai(idx_s_local);
+
+        s = ind_B(p_idx);
+
+        % Atualizacao da base
+        ind_B(p_idx) = q;
+        ind_N(idx_q) = s;
+
+    end
+
+    error('Numero maximo de iteracoes atingido.');
+
+end

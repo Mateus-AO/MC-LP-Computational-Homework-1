@@ -46,6 +46,8 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
     % TRANSICAO PARA A FASE 2
     % ================================================================
     disp('=== Iniciando Fase 2 ===');
+    Aa = A; % Versao antiga de A para fazer a parte 2 do trabalaho
+    % ^ TODO: Remove this later ^
 
     if size(ind_B, 1) ~= m
         [A, ind_B, b, m] = pivotamento_neutro(A_aux, b, ind_B, m, n);
@@ -81,6 +83,9 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
     endif
 
     x = x_full;
+    ind_B_fase2
+    AB = inv(Aa(:, ind_B_fase2))
+    cb = AB*c(ind_B_fase2)
 
 end
 
@@ -116,13 +121,13 @@ function [ind, x_sol, ind_B, ind_N, d] = ...
         c_N_bar = c(ind_N) - N' * y;
 
         % Teste de otimalidade
-        if all(c_N_bar >= 0)
+        if all(c_N_bar >= -eps)
             ind = 0;
             return;
         end
 
         % Variavel entrante
-        cand_entra = find(c_N_bar < 0);
+        cand_entra = find(c_N_bar <= -eps);
 
         idx_q = cand_entra(1);
         q = ind_N(idx_q);

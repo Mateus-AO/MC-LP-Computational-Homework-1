@@ -37,6 +37,7 @@ function [A_r,B_r,b, m] = pivotamento_neutro(A, b, B, m, n)
     b(remov, :) = [];
     B_r(:, remov) = [];
     A_r(remov, :) = [];
+    A_r = A_r(:, 1:n);
 
     return;
 end;

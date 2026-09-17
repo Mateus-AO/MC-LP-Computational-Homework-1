@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[portuguese]{babel}
+\usepackage{indentfirst}
+\usepackage{titlesec}
+
+\titleformat*{\section}{%
+    \fontsize{14}{16}\bfseries%
+}
+
+\titleformat*{\subsection}{%
+    \fontsize{10}{12}\bfseries%
+}
+
+\title{Relatório - Lista Computacional}
+\author{Gabriel Falcão, Marcelo Lopes, Mateus Almeida, Vinícius Kern\\ 
+MC22 - Otimização Linear (2026.2)}
+\date{20 de setembro de 2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Parte 1: Auditoria e Depuração de Código}
+
+\section*{Parte 2: Instância Parametrizada por Matrícula}
+$$
+\min_{x\geq0}-(d_1+1)x_1-(d_2+2)x_2-(d_3+1)x_3
+$$
+$$\text{s.a.}\quad
+\begin{pmatrix}
+2 & 1 & 1\\
+1 & 2 & d_4+1\\
+1 & 1 & 2
+\end{pmatrix}
+\begin{pmatrix}
+x_1\\x_2\\x_3
+\end{pmatrix}
+\leq
+\begin{pmatrix}
+d_1\\d_2\\d_3
+\end{pmatrix}
+$$
+Substituindo os valores
+$
+d_1=3,\,
+d_2=3,\,
+d_3=5,\,
+d_4=0
+$:
+
+$$
+\min_{x\geq0}-4x_1-5x_2-6x_3
+$$
+$$\text{s.a.}\quad
+\begin{pmatrix}
+2 & 1 & 1\\
+1 & 2 & 1\\
+1 & 1 & 2
+\end{pmatrix}
+\begin{pmatrix}
+x_1\\x_2\\x_3
+\end{pmatrix}
+\leq
+\begin{pmatrix}
+3\\3\\5
+\end{pmatrix}
+$$
+
+\end{document}

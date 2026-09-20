@@ -3,7 +3,7 @@
 
 clc; clear;
 
-d1 = -3;
+d1 = 3;
 d2 = 3;
 d3 = 5;
 d4 = 0;
@@ -23,9 +23,9 @@ c = [-(d1+1); -(d2+2); -(d3+1); 0; 0; 0];
 
 [m, n] = size(A);
 
-save('instancia_critica.mat', 'A', 'b', 'c', 'm', 'n');
+save('instancia_matricula.mat', 'A', 'b', 'c', 'm', 'n');
 
-disp('Arquivo "instancia_critica.mat" gerado com sucesso!');
-disp('Para testar a falha no Octave execute:');
-disp('  load("instancia_critica.mat");');
-disp('  [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n);');
+% disp('Arquivo "instancia_critica.mat" gerado com sucesso!');
+% disp('Para testar a falha no Octave execute:');
+% disp('  load("instancia_critica.mat");');
+% disp('  [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n);');

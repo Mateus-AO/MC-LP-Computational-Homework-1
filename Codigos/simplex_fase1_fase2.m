@@ -30,7 +30,7 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
     val_fase1 = c_aux' * x_aux; % resposta otimal tem que ser 0
     % val_fase1 = 0 => x_aux_{idx_B} = 0
 
-    if val_fase1 > 0
+    if val_fase1 > eps                                          % usar 0 ou eps?
         disp('Resultado Fase 1: Problema inviavel.');
 
         ind = 1;
@@ -47,7 +47,7 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
     % ================================================================
     disp('=== Iniciando Fase 2 ===');
     Aa = A; % Versao antiga de A para fazer a parte 2 do trabalaho
-    % ^ TODO: Remove this later ^
+    % ^ TODO: Remove this later ^               % TODO: Remove this later <-
 
     if size(ind_B, 1) ~= m
         [A, ind_B, b, m] = pivotamento_neutro(A_aux, b, ind_B, m, n);
@@ -84,8 +84,26 @@ function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
 
     x = x_full;
     ind_B_fase2
-    AB = inv(Aa(:, ind_B_fase2))
-    cb = AB*c(ind_B_fase2)
+    % AB = inv(Aa(:, ind_B_fase2))
+    % cb = AB*c(ind_B_fase2)
+
+    B_otima = Aa(:, ind_B_fase2);
+    B_inv = inv(B_otima);
+
+    % Vetor dual (y = (B^-1)^T * c_B)
+    c_B = c(ind_B_fase2);
+    y = B_inv' * c_B;
+
+    % Vetor de custos reduzidos (c_bar = c - A^T * y)
+    c_bar = c - Aa' * y;
+
+    disp('Resultados da parte 2');
+    disp('Inversa da Base Ótima (B^-1):');
+    disp(B_inv);
+    disp('Vetor Dual (y):');
+    disp(y);
+    disp('Vetor de Custos Reduzidos (c_bar):');
+    disp(c_bar);
 
 end
 
@@ -149,7 +167,7 @@ function [ind, x_sol, ind_B, ind_N, d] = ...
         razoes = Inf(m, 1);
 
         for i = 1:m
-            if u(i) > 0
+            if u(i) > eps                                   % usar 0 ou eps?
                 razoes(i) = x_B(i) / u(i);
             end
         end

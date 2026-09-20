@@ -22,18 +22,24 @@ MC22 - Otimização Linear (2026.2)}
 
 \maketitle
 
+\section*{Introdução e Metodologia}
+
+[...]
+
 \section*{Parte 1: Auditoria e Depuração de Código}
 Ao final da primeira fase do algoritmo, é esperado que seja encontrada uma base ótima para o problema, eliminando as variáveis artificiais introduzidas previamente. 
 
-Com o valor ótimo sendo obtido durante a primeira fase, é garantido que o problema é viável. Porém, se alguma variável artificial permanecer na base com valor nulo, existem duas possibilidades:
+Com o valor ótimo zero sendo obtido durante a primeira fase, é garantido que o problema é viável. Porém, se alguma variável artificial permanecer na base com valor nulo, existem duas possibilidades:
 
 1. A matriz A possui restrições redundantes;
 
 2. O problema é degenerado.
 
-No primeiro caso, é necessário descartar as colunas artificiais enquanto a matriz de base $B$ é mantida quadrada e com vetores linearmente independentes, pois deve ser não-singular para a aplicação do algoritmo na segunda fase, que exige multiplicações por $B^{-1}$.
+No primeiro caso, é necessário descartar as colunas artificiais enquanto a matriz de base $B$ é mantida quadrada e com vetores linearmente independentes, pois deve ser não-singular para a aplicação do algoritmo na segunda fase, que exige multiplicações por $B^{-1}$ e resoluções de sistemas.
 
-A fim de lidar de forma adequada com as colunas artificiais restantes, foi implementado o método de pivoteamento neutro.
+A fim de lidar de forma adequada com as colunas artificiais restantes, foi implementado o método de pivoteamento neutro. [...]
+
+Além disso, foi adicionado um parâmetro de tolerância $\epsilon=10^{-9}$. Por conta de possíveis erros de ponto flutuante ao realizar operações numéricas, certas verificações que exigem comparações com zero, como em testes de valor ótimo e [...] podem ser realizadas de forma incorreta ao considerar valores provenientes de erros como diferentes de zero. Para isso, certas comparações foram modificadas para aceitar variações dentro desse parâmetro de tolerância, garantindo estabilidade numérica ao algoritmo.
 
 \section*{Parte 2: Instância Parametrizada por Matrícula}
 O problema de programação linear a ser montado, em função da matrícula de um dos estudantes, é dado por:
@@ -148,6 +154,10 @@ $$2.25+0.25\delta\geq0\Rightarrow\delta\geq-9$$
 Assim, $\delta\in\left[-5,\frac{1}{3}\right]$
 
 Portanto, obtemos o seguinte intervalo para $c_1$, com base no valor original $-4$ e nos limites para $\delta$:
-$$c_1\in\left[-9,\frac{11}{3}\right]$$
+$$c_1\in\left[-9,-\frac{11}{3}\right]$$
+
+\section*{Conclusão}
+
+[...]
 
 \end{document}

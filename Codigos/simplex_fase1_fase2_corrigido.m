@@ -1,4 +1,4 @@
-function [ind, x, d] = simplex_fase1_fase2(A, b, c, m, n)
+function [ind, x, d] = simplex_fase1_fase2_corrigido(A, b, c, m, n)
     eps = 1e-9;
 
     for i = 1:m

@@ -33,15 +33,15 @@ Por fim, foi gerada uma instância com base na matrícula de um dos estudantes d
 \section*{Parte 1: Auditoria e Depuração de Código}
 Ao final da primeira fase do algoritmo, é esperado que seja encontrada uma base ótima para o problema, eliminando as variáveis artificiais introduzidas previamente. 
 
-Com o valor ótimo zero sendo obtido durante a primeira fase, é garantido que o problema é viável. Porém, se alguma variável artificial permanecer na base com valor nulo pela existência de restrições redundantes na matriz A, o algoritmo original falha na transição para a segunda fase, pois a matriz base não é quadrada.
+Com o valor ótimo zero sendo obtido durante a primeira fase, é garantido que o problema é viável. Porém, se alguma variável artificial permanecer na base com valor nulo, o algoritmo original falha na transição para a segunda fase, pois a matriz base não é quadrada.
 
 Nesse caso, é necessário descartar as colunas artificiais enquanto a matriz de base $B$ é mantida quadrada e com vetores linearmente independentes, pois deve ser não-singular para a aplicação do algoritmo na segunda fase, que exige multiplicações por $B^{-1}$ e resoluções de sistemas.
 
-A fim de lidar de forma adequada com as colunas artificiais restantes, foi implementado o método de pivoteamento neutro. De forma iterativa, esse algoritmo realiza a remoção das variáveis auxiliares da base, a partir da inserção da identificação de colunas que não comprometam a independência linear da base. A cada iteração, é calculada a forma canônica do problema para a atual base. No caso onde não é encontrada nenhuma candidata à substituição da variável auxiliar na base, a linha é redundante e, portanto, removida.
+A fim de lidar de forma adequada com as colunas artificiais restantes, foi implementado o método de pivoteamento neutro. De forma iterativa, esse algoritmo realiza a remoção das variáveis auxiliares da base, a partir da identificação e inserção de colunas que não comprometam a independência linear. A cada iteração, é calculada a forma canônica do problema para a base atual, a fim de encontrar um novo candidato do problema original para substituir a variável auxiliar antiga na base. No caso onde não é encontrado nenhum candidato, a linha é redundante e, portanto, removida.
 
-Além disso, ao avaliar um problema semelhante ao apresentado na parte 2 do relatório, porém trocando o valor de $d_1$ por seu oposto, foi possível observar que o algoritmo chegou ao limite de iterações sem alcançar o valor ótimo. Isso se deve especialmente à presença de erros numéricos provinentes de operações de ponto flutuante.
+Além disso, ao avaliar um problema semelhante ao apresentado na parte 2 do relatório, porém trocando o valor de $d_1$ por seu oposto, foi possível observar que o algoritmo chegou ao limite de iterações sem alcançar o valor ótimo. Isso se deve especialmente à presença de erros numéricos provenientes de operações de ponto flutuante.
 
-Para evitar tal problema, foi adicionado um parâmetro de tolerância $\epsilon=10^{-9}$. Por conta de possíveis erros de ponto flutuante ao realizar operações numéricas, certas verificações que exigem comparações com zero, como em testes de valor ótimo e razão, podem ser realizadas de forma incorreta ao considerar valores provenientes de erros como diferentes de zero. Para isso, certas comparações foram modificadas para aceitar variações dentro desse parâmetro de tolerância, garantindo estabilidade numérica ao algoritmo.
+Para evitar tal problema, foi adicionado um parâmetro de tolerância $\epsilon=10^{-9}$. Por conta de possíveis erros de ponto flutuante ao realizar operações numéricas, certas verificações que exigem comparações com zero, como em testes de valor ótimo e razão, podem ser realizadas de forma incorreta ao considerar valores provenientes de erros como não-nulos. Para isso, certas comparações foram modificadas para aceitar variações dentro desse parâmetro de tolerância, garantindo estabilidade numérica ao algoritmo.
 
 \section*{Parte 2: Instância Parametrizada por Matrícula}
 O problema de programação linear a ser montado, em função da matrícula de um dos estudantes, é dado por:
@@ -113,7 +113,7 @@ $$
 
 Para o intervalo de variação do coeficiente $c_1$, realizamos uma análise manual. Ao realizar uma perturbação $\delta$ no valor inicial $c_1=-4$, o custo reduzido das variáveis fora da base deve se manter maior que ou igual a zero, ou seja:
 
-$$\overline{c}_N=c_N-N^Ty_{novo}$$
+$$\overline{c}_N=c_N-N^Ty_{novo}\geq0$$
 $$y_{novo}=B^{-1}\left(c_B+\begin{pmatrix}\delta\\0\\0\end{pmatrix}\right)=y^*+B^{-1}\begin{pmatrix}\delta\\0\\0\end{pmatrix}$$
 
 Note que $N=I$ e $c_N=0$, pois as variáveis não-básicas são exatamente as variáveis de folga introduzidas. Assim, realizando os cálculos em função de $\delta$, temos:
@@ -162,8 +162,8 @@ $$c_1\in\left[-9,-\frac{11}{3}\right]$$
 
 Por meio da implementação de correções, foi possível construir um algoritmo preciso para o Método Simplex de Duas Fases, capaz de lidar com erros de ponto flutuante e restrições redundantes de forma adequada, classificando corretamente as instâncias e obtendo o valor ótimo, quando viável.
 
-O pivoteamento neutro demonstrou eficácia ao corrigir a matriz base antes de sua utilização na segunda fase do algoritmo, e o parâmetro de tolerância foi responsável por evitar falsas classificações e propagação de erros numéricos de forma adequada.
+O pivoteamento neutro demonstrou eficácia ao corrigir a matriz base antes de sua utilização na segunda fase do algoritmo, e o parâmetro de tolerância foi responsável por evitar falsas classificações e propagação de erros numéricos.
 
-De posse dos resultados obtidos, foi possível verificar a robustez computacional do algoritmo, tratando corretamente a instância crítica dada e obtendo a solução ótima para o problema instanciado pela matrícula de um dos integrantes do grupo, verificando que as correções foram implementadas corretamente.
+De posse dos resultados obtidos, foi possível verificar a robustez computacional do algoritmo, tratando corretamente a instância crítica dada e obtendo a solução ótima para o problema instanciado pela matrícula de um dos integrantes do grupo, verificando que as correções foram implementadas de forma adequada.
 
 \end{document}
